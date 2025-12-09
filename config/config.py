@@ -5,6 +5,6 @@ class Config:
     IMAGE_DIR = Path("/home/anawat/JJ/Chula/Chess2PGN/data")
 
     # Chess board part configs
-    BILATERAL_FILTER_D = 9
+    BILATERAL_FILTER_DIAMETER = 3
     BILATERAL_FILTER_SIGMA_COLOR = 75
     BILATERAL_FILTER_SIGMA_SPACE = 75
