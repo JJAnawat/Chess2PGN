@@ -88,4 +88,4 @@ tmp/
 .cache/
 *.cache
 
-*.mp4
+data/video/*.mp4
