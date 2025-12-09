@@ -87,3 +87,5 @@ tmp/
 # Cache
 .cache/
 *.cache
+
+*.mp4
