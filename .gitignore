@@ -89,3 +89,4 @@ tmp/
 *.cache
 
 data/video/*.mp4
+data/video_2/*.mp4
