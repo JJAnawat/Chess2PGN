@@ -9,23 +9,19 @@ This repository contains the final project for **Introduction to Digital Imaging
 - [Approach](#approach)
 - [Model](#models)
   - [Chess Piece Recognition](#chess-piece-recognition)
-- [Data](#data)
-- [Pipeline](#pipeline)
-- [Evaluation](#evaluation)
-- [Team Roles](#team-roles)
-- [Challenges and Improvements](#challenges-and-improvements)
+- [Limitations](#limitations)
 
 ---
 
 ## Overview
-The Chess Move Tracking system extracts each frame from a video, identifies chessboard positions, detects the pieces, and tracks their movements. It ultimately converts the detected changes into FEN (Forsyth-Edwards Notation) and then into PGN (Portable Game Notation). The key objective is to automate the tracking of chess moves from video footage with high accuracy.
+The Chess Move Tracking system first calibrate the whole video by using first frame to identify board layout and its orientation. After that it heuristically stream through the whole video and extract from those frames. It then map from chess states into PGN format by comparing result with chess engine. The key objective is to automate the tracking of chess moves from video footage with high accuracy.
 
 ---
 
 ## Approach
-1. **Extract Frames**: Each frame of the input video is extracted for analysis.
-2. **Model Inference**: Each frame is processed through object detection models to detect chessboard corners and recognize the chess pieces.
-3. **FEN to PGN Conversion**: The detected chessboard positions are converted from FEN to PGN.
+1. **Calibration**: Extract first frame of each video to calibration board layout and orientation.
+2. **Video Stream**: Extract chess states from video using pixel different
+3. **PGN Conversion**: Map 1-1 between 2 chess states and asking chess engine if there's a valid one, and use that.
 
 ---
 
@@ -40,56 +36,11 @@ The Chess Move Tracking system extracts each frame from a video, identifies ches
 - **Weight Link**: https://drive.google.com/uc?id=1J2o2LK97blBXXD7mg_RuP6w1LQLvrNbA
 ---
 
-## Data
-**Chessboard Corner Detection Data**: Manually labeled data for chessboard corner detetcion using Roboflow.
-
-**Chess Piece Recognition Data**: A combination of datasets from RoboFlow and additional custom datasets provided by the course instructor.
-
----
-
-## Pipeline
-![Screenshot 2024-12-12 155353](https://github.com/user-attachments/assets/167563e9-5e03-4154-baba-6493fb8754e9)
-![Screenshot 2024-12-12 155501](https://github.com/user-attachments/assets/7bd7c043-dcc1-4d7c-9d72-9c6843bdded5)
-
-1. **Chessboard Corner Detection**
-   - Identify the four corners of the chessboard in each frame using YOLOv8.
-   - Crop and align the board area for further processing.
-2. **Chess Piece Recognition**
-   - Detect chess pieces in the cropped chessboard image using YOLOv11m.
-   - Map the detected positions to chessboard slots.
-3. **FEN to PGN Conversion**
-   - Convert the detected chessboard positions from FEN to PGN.
-   - Aggregate PGN data into a CSV file.
-
----
-
-## Evaluation
-### Chess Detection Metrics
-- **F1 Curve**
-- **Recall Curve**
-- **Confusion Matrix**
-
-### Corner Detection Metrics
-- **F1 Curve**
-- **Recall Curve**
-- **Confusion Matrix**
-
----
-
-## Team Roles
-| **Team Member**      | **Role**                                         |
-|---------------------|-------------------------------------------------|
-| Thiraput Khongmuak  | Model, Pipeline Design, FEN to PGN Conversion    |
-| Chanotai Krajeam    | Chess Model Detection (Fast-RCNN), Corner Image Processing (Canny + Houghline) |
-| Chayapon Arpayatam  | Chess Detection Model, Corner Detection Data & Model, Evaluation Check |
-| Chatdanai Porncharoensub | Chess Model Detection (YOLO11m), PGN Algorithm Improvement, Evaluation |
-
----
-
-## Challenges and Improvements
-- **Insufficient Accuracy**: Initial models were not accurate enough.
-- **Model Comparisons**: YOLO significantly outperformed Fast-RCNN and DETR models, even after fine-tuning with RoboFlow and in-class datasets.
-- **Model Upgrades**: Upgrading from YOLOv8 to YOLOv11m significantly improved accuracy. Future work could explore larger and more advanced models.
-- **PGN Transformation**: The algorithm for converting FEN to PGN is not generalized for all cases.
+## Limitations
+- **Heavily Rely on the Calibration Phase**: If program failed to find the board layout or board orientation first, the whole program will surely predict wrong PGN output.
+- **Rely on Multiple Assumptions**: 
+   - Assume the whole video is static
+   - Assume the video rotation fall into 90, 180, 270, 360 degrees
+   - Assume the game is starting/middle game (not end game)
 ---
 
